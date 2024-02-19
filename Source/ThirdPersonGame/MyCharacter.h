@@ -12,23 +12,28 @@ class THIRDPERSONGAME_API AMyCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AMyCharacter();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+public:	
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void Interact();
 	void ThrowBall();
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//UPROPERTY(EditAnywhere, Category = "Properties")
+	//	AChest& MyChestInstanceRef = *MyChestInstancePointer;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	TArray<AActor*> ActorsArray;
+	TArray<AActor*> ChestNearbyArray;
+
+	float ChestInteractRadius = 200.0f;
 
 };
