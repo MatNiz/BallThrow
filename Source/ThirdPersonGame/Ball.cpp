@@ -2,6 +2,7 @@
 
 
 #include "Ball.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 ABall::ABall()
@@ -27,3 +28,26 @@ void ABall::Tick(float DeltaTime)
 
 }
 
+
+void ABall::PickUp(AActor* Actor)
+{
+	if (IsPickedUp == false) 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Ball picked up");
+		AttachToActor(Actor, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+		IsPickedUp = true;
+	}
+
+}
+
+
+void ABall::Throw()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "Ball throw");
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+	FVector ThrowVelocity = GetActorForwardVector() * ThrowSpeed + FVector(0.0f, 0.0f, 1000.0f);
+	BallMesh->SetPhysicsLinearVelocity(ThrowVelocity, false);
+
+}

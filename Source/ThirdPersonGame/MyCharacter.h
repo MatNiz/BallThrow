@@ -33,7 +33,15 @@ private:
 
 	TArray<AActor*> ActorsArray;
 	TArray<AActor*> ChestNearbyArray;
+	TArray<AActor*> BallArray;
 
-	float ChestInteractRadius = 200.0f;
+	AActor* BallInHandRef;
+	bool BallInHandBool = false;
+
+
+	float ChestInteractDistance = 150.0f;
+	float BallInteractDistance = 150.0f;
+
+	void PickUpBall(AActor* BallToPickUp);
 
 };

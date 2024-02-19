@@ -38,7 +38,7 @@ void AChest::ChestInteracton()
 		SpawnBall();
 	}
 	else
-		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, "CloseChest");
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "CloseChest");
 
 	Open = !Open;
 
@@ -59,14 +59,13 @@ void AChest::FarColorChange()
 
 
 
-
 void AChest::SpawnBall()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, "Ball Spawned");
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Ball Spawned");
 
 	FTransform SpawnTransform = GetActorTransform();
 
-	SpawnTransform.SetLocation(GetActorLocation() + GetActorForwardVector() * 50.0);
+	SpawnTransform.SetLocation(GetActorLocation() + GetActorForwardVector() * SpawnOffset);
 	GetWorld()->SpawnActor<ABall>(BallClass, SpawnTransform);
 
 }

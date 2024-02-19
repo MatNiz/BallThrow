@@ -39,7 +39,7 @@ private:
 		TSubclassOf<class ABall> BallClass;
 
 	bool Open = false;
-	FVector SpawnOffset = FVector(80, 80, 10);
+	float SpawnOffset = 100.0f;
 
 	void SpawnBall();
 
