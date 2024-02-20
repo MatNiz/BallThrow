@@ -4,27 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
-#include "GameFramework/Pawn.h"
-#include "BehaviorTree/BehaviorTreeComponent.h"
-#include "BehaviorTree/BehaviorTreeTypes.h"
-#include "UObject/UObjectGlobals.h"
-#include "FindBallTask.generated.h"
+#include "FindPlayerTask.generated.h"
 
 /**
  * 
  */
 UCLASS(Blueprintable)
-class THIRDPERSONGAME_API UFindBallTask : public UBTTask_BlackboardBase
+class THIRDPERSONGAME_API UFindPlayerTask : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
 
 public:
-	UFindBallTask(FObjectInitializer const& object_initializer);
+	UFindPlayerTask(FObjectInitializer const& object_initializer);
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory);
+	
 private:
 	UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "Search", meta = (AllowPrivateAccess = " true"))
-		float SearchRadius = 1500.0f;
+		bool SearchRandom = false;
 
-	AActor* SearchedBall;
-	
+	UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "Search", meta = (AllowPrivateAccess = " true"))
+		float SearchRadius = 150.0f;
+
 };

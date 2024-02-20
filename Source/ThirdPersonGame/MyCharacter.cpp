@@ -158,7 +158,10 @@ void AMyCharacter::PickUpBall(AActor* BallToPickUp)
 	BallToPickUp->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "BallSocket");
 }
 
-
+AActor* AMyCharacter::GetBallInHandRef() const
+{
+	return BallInHandRef;
+}
 
 
 
@@ -176,6 +179,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("ThrowBall", IE_Pressed, this, &AMyCharacter::ThrowBall);
 
 }
+
 
 void AMyCharacter::MoveForward(float Value)
 {

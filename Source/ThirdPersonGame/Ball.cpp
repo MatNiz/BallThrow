@@ -52,11 +52,9 @@ void ABall::Throw(AActor* Actor)
 
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-	FRotator NewRotation = Actor->GetActorRotation();
-
+	/*FRotator NewRotation = Actor->GetActorRotation();
 	NewRotation.Add(50, 0, 0);
-
-	SetActorRotation(NewRotation);
+	SetActorRotation(NewRotation);*/
 
 
 	FVector ThrowVelocity = Actor->GetActorForwardVector() * ThrowSpeed + FVector(0.0f, 0.0f, ThrowZOffset);

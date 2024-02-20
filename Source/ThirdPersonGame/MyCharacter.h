@@ -26,6 +26,9 @@ public:
 
 	//UPROPERTY(EditAnywhere)
 	//UUserWidget* BallCounterWidget;
+	AActor* BallInHandRef;
+
+	class AActor* GetBallInHandRef() const;
 
 
 private:
@@ -41,7 +44,7 @@ private:
 	TArray<AActor*> ChestNearbyArray;
 	TArray<AActor*> BallArray;
 
-	AActor* BallInHandRef;
+
 	bool BallInHandBool = false;
 
 
