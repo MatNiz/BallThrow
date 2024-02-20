@@ -11,6 +11,7 @@ ABall::ABall()
 	PrimaryActorTick.bCanEverTick = true;
 
 	BallMesh = CreateDefaultSubobject<UStaticMeshComponent>("BallMesh");
+	RootComponent = BallMesh;
 
 }
 
@@ -29,25 +30,31 @@ void ABall::Tick(float DeltaTime)
 }
 
 
-void ABall::PickUp(AActor* Actor)
+void ABall::DisablePhysicAndCollision(AActor* Actor)
 {
 	if (IsPickedUp == false) 
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Ball picked up");
-		AttachToActor(Actor, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		BallMesh->SetSimulatePhysics(false);
+		BallMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+		//AttachToActor(Actor, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		IsPickedUp = true;
 	}
-
 }
 
 
-void ABall::Throw()
+void ABall::Throw(AActor* Actor)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "Ball throw");
+
+	BallMesh->SetSimulatePhysics(true);
+	BallMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-	FVector ThrowVelocity = GetActorForwardVector() * ThrowSpeed + FVector(0.0f, 0.0f, 1000.0f);
+	FVector ThrowVelocity = Actor->GetActorForwardVector() * ThrowSpeed + FVector(0.0f, 0.0f, 800.0f);
 	BallMesh->SetPhysicsLinearVelocity(ThrowVelocity, false);
+
+	IsPickedUp = false;
 
 }

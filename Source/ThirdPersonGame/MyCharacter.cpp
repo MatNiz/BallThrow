@@ -4,8 +4,11 @@
 #include "MyCharacter.h"
 #include "Chest.h"
 #include "Ball.h"
+#include "BallCounterWidget.h"
 #include <EngineUtils.h>
 #include <Kismet/GameplayStatics.h>
+#include <Subsystems/PanelExtensionSubsystem.h>
+#include <Components/WidgetComponent.h>
 
 
 AMyCharacter::AMyCharacter()
@@ -18,9 +21,36 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//BallCounterWidget = FPanelExtensionFactory::CreateWidget<UUserWidget>(GetWorld(), BP_BallCounterWidget);
+
+
+	//// Wczytanie klasy widgetu
+	//TSubclassOf<UUserWidget> WidgetClass = BallCounterWidget;
+
+	//TSubclassOf<UUserWidget> WidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("WidgetBlueprint'/Game/MyContent/Blueprints/BP_BallCounterWidget.BP_BallCounterWidget_C'"));
+
+	//TSubclassOf<UUserWidget> WidgetClass = LoadClass<UUserWidget>(nullptr, "/Game/MyContent/Blueprints/BP_BallCounterWidget.BP_BallCounterWidget_C");
+
+	//TSubclassOf<UUserWidget> WidgetClass = BP_BallCounterWidget_C;
+
+
+	//// Utworzenie instancji widgetu
+	//UUserWidget* WidgetInstance = CreateWidget<UUserWidget>(this, BallCounterWidget);
+
+	//// Dodanie widgetu do widoku
+	//BallCounterWidget->AddToViewport();
+
+	// SprawdŸ, czy widget zosta³ poprawnie utworzony
+	//if (BallCounterWidget)
+	//{
+	//	// Dodaj widget do widoku gracza
+	//	BallCounterWidget->AddToViewport();
+	//}
+
+
 	if (UWorld* World = GetWorld())
 	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChest::StaticClass(), ActorsArray);
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChest::StaticClass(), ChessArray);
 	}
 
 }
@@ -32,7 +62,7 @@ void AMyCharacter::Tick(float DeltaTime)
 	FVector CharacterLocation = GetActorLocation();
 	ChestNearbyArray.Empty();
 
-	for (AActor* Actor : ActorsArray)
+	for (AActor* Actor : ChessArray)
 	{
 		/*FString VariableValueAsString = FString::Printf(TEXT("Wartoœæ zmiennej: %f"), DistanceToWantedActor);
 		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, VariableValueAsString);*/
@@ -79,6 +109,66 @@ void AMyCharacter::Tick(float DeltaTime)
 }
 
 
+void AMyCharacter::Interact()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, "E Pressed");
+
+	for (AActor* Actor : ChestNearbyArray)
+	{
+		AChest* Chest = Cast<AChest>(Actor);
+		if (Chest != nullptr)
+		{
+			Chest->ChestInteracton();
+		}
+	}
+
+	for (AActor* Actor : BallArray)
+	{
+		ABall* Ball = Cast<ABall>(Actor);
+		if (Ball != nullptr && BallInHandBool == false)
+		{
+			Ball->DisablePhysicAndCollision(this);
+			BallInHandRef = Ball;
+			BallInHandBool = true;
+			PickUpBall(Ball);
+		}
+	}
+
+}
+
+
+void AMyCharacter::ThrowBall()
+{
+	ABall* Ball = Cast<ABall>(BallInHandRef);
+	if (Ball != nullptr)
+	{
+		Ball->Throw(this);
+		BallInHandRef = nullptr;
+		BallInHandBool = false;
+	}
+}
+
+
+void AMyCharacter::PickUpBall(AActor* BallToPickUp)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "PickUpBall");
+
+	ABall* Ball = Cast<ABall>(BallToPickUp);
+
+	FName HandSocketName = "BallSocket";
+
+	FVector HandLocation = GetMesh()->GetSocketLocation(HandSocketName);
+
+	BallToPickUp->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, HandSocketName);
+	BallToPickUp->SetActorLocation(HandLocation);
+
+}
+
+
+
+
+
+
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -111,57 +201,5 @@ void AMyCharacter::MoveRight(float Value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		AddMovementInput(Direction, Value);
-	}
-}
-
-
-void AMyCharacter::Interact()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, "E Pressed");
-
-	for (AActor* Actor : ChestNearbyArray)
-	{
-		AChest* Chest = Cast<AChest>(Actor);
-		if (Chest != nullptr)
-		{
-			Chest->ChestInteracton();
-		}
-	}
-
-	for (AActor* Actor : BallArray)
-	{
-		ABall* Ball = Cast<ABall>(Actor);
-		if (Ball != nullptr && BallInHandBool == false)
-		{
-			Ball->PickUp(this);
-			BallInHandRef = Ball;
-			BallInHandBool = true;
-		}
-	}
-
-}
-
-
-void AMyCharacter::ThrowBall()
-{
-	ABall* Ball = Cast<ABall>(BallInHandRef);
-	if (Ball != nullptr)
-	{
-		Ball->Throw();
-		BallInHandRef = nullptr;
-		BallInHandBool = false;
-	}
-}
-
-
-void AMyCharacter::PickUpBall(AActor* BallToPickUp)
-{
-	if (BallToPickUp)
-	{
-		// ZnajdŸ koœæ, do której chcesz przypi¹æ pi³kê
-		FName SocketName = BallSocket; // Zast¹p "SocketName" nazw¹ koœci
-
-		// Przypnij pi³kê do konkretnej koœci
-		BallToPickUp->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
 	}
 }

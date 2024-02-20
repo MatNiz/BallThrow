@@ -26,14 +26,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Properties")
 		class UStaticMeshComponent* BallMesh;
 
-	void PickUp(AActor* Actor);
-	void Throw();
+	void DisablePhysicAndCollision(AActor* Actor);
+	void Throw(AActor* Actor);
 
 
 
 private:
 	bool IsPickedUp = false;
-	float ThrowSpeed = 100.0f;
+	float ThrowSpeed = 300.0f;
 
 
 

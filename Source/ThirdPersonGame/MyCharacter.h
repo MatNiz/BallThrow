@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
 
+//class UUserWidget;
+
 UCLASS()
 class THIRDPERSONGAME_API AMyCharacter : public ACharacter
 {
@@ -22,6 +24,10 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//UPROPERTY(EditAnywhere)
+	UUserWidget* BallCounterWidget;
+
+
 private:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
@@ -31,7 +37,7 @@ private:
 	//UPROPERTY(EditAnywhere, Category = "Properties")
 	//	AChest& MyChestInstanceRef = *MyChestInstancePointer;
 
-	TArray<AActor*> ActorsArray;
+	TArray<AActor*> ChessArray;
 	TArray<AActor*> ChestNearbyArray;
 	TArray<AActor*> BallArray;
 
