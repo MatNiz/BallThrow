@@ -1,5 +1,6 @@
 #include "Chest.h"
 #include "Ball.h"
+#include <random>
 
 // Sets default values
 AChest::AChest()
@@ -8,6 +9,7 @@ AChest::AChest()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ChestMesh = CreateDefaultSubobject<UStaticMeshComponent>("ChestMesh");
+	RootComponent = ChestMesh;
 
 }
 
@@ -17,8 +19,6 @@ void AChest::BeginPlay()
 	Super::BeginPlay();
 
 	OriginalMaterial = ChestMesh->GetMaterial(0);
-
-	// Utwórz instancjê dynamicznego materia³u
 	DynamicMaterialInstance = UMaterialInstanceDynamic::Create(OriginalMaterial, this);
 	ChestMesh->SetMaterial(0, DynamicMaterialInstance);
 
@@ -36,12 +36,15 @@ void AChest::ChestInteracton()
 	if (Open == false)
 	{
 		SpawnBall();
+		SetActorScale3D(FVector(1, 1, OpenChestSize));
 	}
 	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "CloseChest");
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "CloseChest");
+		SetActorScale3D(FVector(1, 1, 1));
+	}
 
 	Open = !Open;
-
 }
 
 void AChest::CloseColorChange()
@@ -65,7 +68,16 @@ void AChest::SpawnBall()
 
 	FTransform SpawnTransform = GetActorTransform();
 
-	SpawnTransform.SetLocation(GetActorLocation() + GetActorForwardVector() * SpawnOffset);
+	SpawnTransform.SetLocation(GetActorLocation() + GetActorForwardVector() * RandomFloat(MinSpawnOffset, MaxSpawnOffset));
 	GetWorld()->SpawnActor<ABall>(BallClass, SpawnTransform);
 
+}
+
+float AChest::RandomFloat(float Min, float Max)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dis(Min, Max);
+
+	return dis(gen);
 }

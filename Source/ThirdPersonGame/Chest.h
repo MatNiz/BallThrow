@@ -31,17 +31,22 @@ public:
 	void CloseColorChange();
 	void FarColorChange();
 
-	UMaterialInstanceDynamic* DynamicMaterialInstance;
-	UMaterialInterface* OriginalMaterial;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Properties")
 		TSubclassOf<class ABall> BallClass;
 
+	UMaterialInstanceDynamic* DynamicMaterialInstance;
+	UMaterialInterface* OriginalMaterial;
+
 	bool Open = false;
-	float SpawnOffset = 100.0f;
+	float MinSpawnOffset = 85.0f;
+	float MaxSpawnOffset = 115.0f;
+
+	float OpenChestSize = 1.3;
+
 
 	void SpawnBall();
-
+	float RandomFloat(float Min, float Max);
 
 };

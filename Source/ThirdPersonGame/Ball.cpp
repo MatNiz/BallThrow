@@ -37,7 +37,6 @@ void ABall::DisablePhysicAndCollision(AActor* Actor)
 		BallMesh->SetSimulatePhysics(false);
 		BallMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-		//AttachToActor(Actor, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		IsPickedUp = true;
 	}
 }
@@ -50,9 +49,17 @@ void ABall::Throw(AActor* Actor)
 	BallMesh->SetSimulatePhysics(true);
 	BallMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
+
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-	FVector ThrowVelocity = Actor->GetActorForwardVector() * ThrowSpeed + FVector(0.0f, 0.0f, 800.0f);
+	FRotator NewRotation = Actor->GetActorRotation();
+
+	NewRotation.Add(50, 0, 0);
+
+	SetActorRotation(NewRotation);
+
+
+	FVector ThrowVelocity = Actor->GetActorForwardVector() * ThrowSpeed + FVector(0.0f, 0.0f, ThrowZOffset);
 	BallMesh->SetPhysicsLinearVelocity(ThrowVelocity, false);
 
 	IsPickedUp = false;

@@ -24,6 +24,8 @@ void AMyCharacter::BeginPlay()
 	//BallCounterWidget = FPanelExtensionFactory::CreateWidget<UUserWidget>(GetWorld(), BP_BallCounterWidget);
 
 
+	//static ConstructorHelpers::FObjectFinder<UUserWidget> obj(TEXT("WidgetBlueprint'/Game/MyContent/Blueprints/BP_BallCounterWidget.BP_BallCounterWidget'"));
+
 	//// Wczytanie klasy widgetu
 	//TSubclassOf<UUserWidget> WidgetClass = BallCounterWidget;
 
@@ -111,7 +113,7 @@ void AMyCharacter::Tick(float DeltaTime)
 
 void AMyCharacter::Interact()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, "E Pressed");
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, "E Pressed");
 
 	for (AActor* Actor : ChestNearbyArray)
 	{
@@ -153,15 +155,7 @@ void AMyCharacter::PickUpBall(AActor* BallToPickUp)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "PickUpBall");
 
-	ABall* Ball = Cast<ABall>(BallToPickUp);
-
-	FName HandSocketName = "BallSocket";
-
-	FVector HandLocation = GetMesh()->GetSocketLocation(HandSocketName);
-
-	BallToPickUp->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, HandSocketName);
-	BallToPickUp->SetActorLocation(HandLocation);
-
+	BallToPickUp->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "BallSocket");
 }
 
 

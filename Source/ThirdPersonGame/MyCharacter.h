@@ -25,7 +25,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	//UPROPERTY(EditAnywhere)
-	UUserWidget* BallCounterWidget;
+	//UUserWidget* BallCounterWidget;
 
 
 private:
