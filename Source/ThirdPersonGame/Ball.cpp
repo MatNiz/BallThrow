@@ -30,17 +30,6 @@ void ABall::Tick(float DeltaTime)
 }
 
 
-//void ABall::DisablePhysicAndCollision()
-//{
-//	if (IsPickedUp == false) 
-//	{
-//		BallMesh->SetSimulatePhysics(false);
-//		BallMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-//
-//		IsPickedUp = true;
-//	}
-//}
-
 void ABall::PickUp(AActor* Actor)
 {
 	if (IsPickedUp == false)

@@ -35,30 +35,36 @@ private:
 	void MoveRight(float Value);
 	void Interact();
 	void ThrowBall();
+	void SpawnNewBallCollector();
+
+
+	//class ABall* BallInHandRef;
+	AActor* ActorInHandRef;
 
 	UPROPERTY(EditAnywhere, Category = "Properties")
 		TSubclassOf<class ABallCollectorCharacter> BallCollectorClass;
 
-	//UPROPERTY(EditAnywhere, Category = "Properties")
-	//	AChest& MyChestInstanceRef = *MyChestInstancePointer;
+	UPROPERTY(EditAnywhere, Category = "Properties")
+		TSubclassOf<class ABallCollectorController> BallCollectorControllerClass;
 
 	TArray<AActor*> ChessArray;
 	TArray<AActor*> ChestNearbyArray;
 	TArray<AActor*> BallArray;
 
-	AActor* BallInHandRef;
+	FVector BallCollectorSpawnLocation = FVector(0, 0, 180);
 
 	bool BallThrown = false;
 	bool BallInHand = false;
 
-
-	float ChestInteractDistance = 150.0f;
-	float BallInteractDistance = 150.0f;
+	float InteractionDistance = 150.0f;
 
 	float ThrowSpeed = 1000.0f;
 	float ThrowZOffset = 800.0f;
 
-	void PickUpBall(AActor* BallToPickUp);
-	void ThrowBall(AActor* BallToPickUp);
+
+	//UPROPERTY(EditAnywhere, Category = "Properties")
+//	AChest& MyChestInstanceRef = *MyChestInstancePointer;
+
+
 
 };

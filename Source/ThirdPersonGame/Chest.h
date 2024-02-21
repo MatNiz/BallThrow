@@ -24,9 +24,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
-	UPROPERTY(EditAnywhere, Category = "Properties")
-		class UStaticMeshComponent* ChestMesh;
-
 	void ChestInteracton();
 	void CloseColorChange();
 	void FarColorChange();
@@ -36,14 +33,18 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Properties")
 		TSubclassOf<class ABall> BallClass;
 
+	class UStaticMeshComponent* ChestMesh;
+	class UStaticMesh* ChestClosedMesh;
+	class UStaticMesh* ChestOpenMesh;
+
 	UMaterialInstanceDynamic* DynamicMaterialInstance;
 	UMaterialInterface* OriginalMaterial;
 
 	bool Open = false;
+
 	float MinSpawnOffset = 85.0f;
 	float MaxSpawnOffset = 115.0f;
-
-	float OpenChestSize = 1.3;
+	float ZSpawnOffset = 50.0f;
 
 
 	void SpawnBall();

@@ -32,15 +32,12 @@ public:
 	void PickUp(AActor* Actor);
 
 
-
 private:
 	bool IsPickedUp = false;
-	//float ThrowSpeed = 300.0f;
-	//float ThrowZOffset = 800.0f;
+
 
 	/*UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "AI", meta = (AllowPrivateAccess = " true"))
 	class UNiagaraComponent* BallNiagaraComponent;
 	*/
-
 
 };

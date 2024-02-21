@@ -10,6 +10,7 @@
 #include <Subsystems/PanelExtensionSubsystem.h>
 #include <Components/WidgetComponent.h>
 #include "BallCollectorCharacter.h"
+#include "BallCollectorController.h"
 
 
 AMyCharacter::AMyCharacter()
@@ -75,7 +76,7 @@ void AMyCharacter::Tick(float DeltaTime)
 		{
 			FVector ActorLocation = Actor->GetActorLocation();
 			float DistanceToWantedActor = (ActorLocation - CharacterLocation).Size();
-			if (DistanceToWantedActor <= ChestInteractDistance)
+			if (DistanceToWantedActor <= InteractionDistance)
 			{
 				Chest->CloseColorChange();
 				ChestNearbyArray.Add(Actor);
@@ -102,7 +103,7 @@ void AMyCharacter::Tick(float DeltaTime)
 
 		FVector ActorLocation = Actor->GetActorLocation();
 		float DistanceToWantedActor = (ActorLocation - CharacterLocation).Size();
-		if (DistanceToWantedActor <= BallInteractDistance)
+		if (DistanceToWantedActor <= InteractionDistance)
 		{
 			BallArray.Add(Actor);
 		}
@@ -125,44 +126,53 @@ void AMyCharacter::Interact()
 	for (AActor* Actor : BallArray)
 	{
 		ABall* Ball = Cast<ABall>(Actor);
+		//BallInHandRef = Cast<ABall>(Actor);
 		if (Ball != nullptr && BallInHand == false)
 		{
 			Ball->PickUp(this);
-			BallInHandRef = Ball;
+			//BallInHandRef = Ball;
+			ActorInHandRef = Ball;
 			BallThrown = false;
 			BallInHand = true;
 
-
-			FTransform SpawnTransform(FRotator(0, 0, 0), FVector(0, 0, 180), FVector(1, 1, 1));
-
-			GetWorld()->SpawnActor<ABallCollectorCharacter>(BallCollectorClass, SpawnTransform);
-			//Ball->DisablePhysicAndCollision();
-			//PickUpBall(Ball);
+			SpawnNewBallCollector();
 		}
 	}
 }
 
 void AMyCharacter::ThrowBall()
 {
-	ABall* Ball = Cast<ABall>(BallInHandRef);
-	if (Ball != nullptr)
+	ABall* Ball = Cast<ABall>(ActorInHandRef);
+	if (Ball != nullptr && BallInHand == true)
 	{
 		Ball->Throw(this, ThrowSpeed, ThrowZOffset);
 		BallThrown = true;
 		BallInHand = false;
-		//ThrowBall(BallInHandRef);
+	}
+}
+
+void AMyCharacter::SpawnNewBallCollector()
+{
+	ABallCollectorCharacter* NewCharacter = GetWorld()->SpawnActor<ABallCollectorCharacter>(BallCollectorClass, FTransform (FRotator(0, 0, 0), BallCollectorSpawnLocation, FVector(1, 1, 1)));
+	ABallCollectorController* NewController = GetWorld()->SpawnActor<ABallCollectorController>(BallCollectorControllerClass);
+
+	if (NewController && NewCharacter)
+	{
+		NewController->Possess(NewCharacter);
 	}
 }
 
 
+
+
 AActor* AMyCharacter::GetBallInHandRef() const
 {
-	return BallInHandRef;
+	return ActorInHandRef;
 }
 
 void AMyCharacter::ClearBallInHandRef()
 {
-	BallInHandRef = nullptr;
+	ActorInHandRef = nullptr;
 }
 
 bool AMyCharacter::GetBallThrown()
@@ -170,49 +180,6 @@ bool AMyCharacter::GetBallThrown()
 	return BallThrown;
 }
 
-
-
-//void AMyCharacter::PickUpBall(AActor* BallToPickUp)
-//{
-//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "PickUpBall");
-//
-//	auto const BallMesh = BallToPickUp->FindComponentByClass<UStaticMeshComponent>();
-//	if (BallMesh)
-//	{
-//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "BallMesh");
-//		BallMesh->SetSimulatePhysics(false);
-//		BallMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-//	}
-//
-//
-//	BallThrown = false;
-//	BallToPickUp->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "BallSocket");
-//}
-
-//void AMyCharacter::ThrowBall(AActor* BallToPickUp)
-//{
-//	auto const BallMesh = BallToPickUp->FindComponentByClass<UStaticMeshComponent>();
-//	if (BallMesh)
-//	{
-//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "Ball throw");
-//
-//		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-//
-//		BallMesh->SetSimulatePhysics(true);
-//		BallMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-//
-//
-//		/*FRotator NewRotation = Actor->GetActorRotation();
-//		NewRotation.Add(50, 0, 0);
-//		SetActorRotation(NewRotation);*/
-//
-//
-//		FVector ThrowVelocity = this->GetActorForwardVector() * ThrowSpeed + FVector(0.0f, 0.0f, ThrowZOffset);
-//		BallMesh->SetPhysicsLinearVelocity(ThrowVelocity, false);
-//	}
-//
-//
-//}
 
 
 

@@ -10,8 +10,6 @@ ABallCollectorCharacter::ABallCollectorCharacter()
     // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
-    //ABallCollectorController* NewController = GetWorld()->SpawnActor<ABallCollectorController>(BallCollectorControllerClass);
-
 }
 
 // Called when the game starts or when spawned
@@ -19,14 +17,6 @@ void ABallCollectorCharacter::BeginPlay()
 {
     Super::BeginPlay();
 
-
-
-    /* if (NewController)
-     {
-         UE_LOG(LogTemp, Warning, TEXT("NewController"));
-         NewController->Possess(this);
-     }
-  */
 }
 
 // Called every frame

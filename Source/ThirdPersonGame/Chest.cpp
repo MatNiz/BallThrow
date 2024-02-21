@@ -11,6 +11,7 @@ AChest::AChest()
 	ChestMesh = CreateDefaultSubobject<UStaticMeshComponent>("ChestMesh");
 	RootComponent = ChestMesh;
 
+
 }
 
 // Called when the game starts or when spawned
@@ -18,10 +19,15 @@ void AChest::BeginPlay()
 {
 	Super::BeginPlay();
 
+
+	ChestClosedMesh = LoadObject<UStaticMesh>(nullptr, TEXT("StaticMesh'/Game/MyContent/Meshes/SM_ChestClosed.SM_ChestClosed'"));
+	ChestOpenMesh = LoadObject<UStaticMesh>(nullptr, TEXT("StaticMesh'/Game/MyContent/Meshes/SM_ChestOpen.SM_ChestOpen'"));
+
+	ChestMesh->SetStaticMesh(ChestClosedMesh);
+
 	OriginalMaterial = ChestMesh->GetMaterial(0);
 	DynamicMaterialInstance = UMaterialInstanceDynamic::Create(OriginalMaterial, this);
 	ChestMesh->SetMaterial(0, DynamicMaterialInstance);
-
 }
 
 // Called every frame
@@ -36,39 +42,32 @@ void AChest::ChestInteracton()
 	if (Open == false)
 	{
 		SpawnBall();
-		SetActorScale3D(FVector(1, 1, OpenChestSize));
+		ChestMesh->SetStaticMesh(ChestOpenMesh);
 	}
 	else
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "CloseChest");
-		SetActorScale3D(FVector(1, 1, 1));
+		ChestMesh->SetStaticMesh(ChestClosedMesh);
 	}
-
 	Open = !Open;
 }
 
 void AChest::CloseColorChange()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::White, "Chest Close");
 	DynamicMaterialInstance->SetVectorParameterValue("Color", FLinearColor::Green);
+
 }
 
 void AChest::FarColorChange()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::White, "Chest Far");
 	DynamicMaterialInstance->SetVectorParameterValue("Color", FLinearColor::White);
 }
 
 
-
-
 void AChest::SpawnBall()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Ball Spawned");
-
 	FTransform SpawnTransform = GetActorTransform();
 
-	SpawnTransform.SetLocation(GetActorLocation() + GetActorForwardVector() * RandomFloat(MinSpawnOffset, MaxSpawnOffset));
+	SpawnTransform.SetLocation(GetActorLocation() + GetActorForwardVector() * RandomFloat(MinSpawnOffset, MaxSpawnOffset) + FVector(0, 0, ZSpawnOffset));
 	GetWorld()->SpawnActor<ABall>(BallClass, SpawnTransform);
 
 }
