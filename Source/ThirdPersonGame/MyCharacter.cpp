@@ -137,6 +137,7 @@ void AMyCharacter::ThrowBall()
 	if (Ball != nullptr && BallInHand == true)
 	{
 		Ball->Throw(this, ThrowSpeed, ThrowZOffset);
+		Ball->ToggleNiagara();
 		BallInHand = false;
 
 		BallCounterWidget->ChangeBallCounterText(FText::FromString("Ball: 0"));

@@ -30,14 +30,13 @@ public:
 	//void DisablePhysicAndCollision();
 	void Throw(AActor* Actor, float ThrowSpeed, float ThrowZOffset);
 	void PickUp(AActor* Actor);
-
+	void ToggleNiagara();
 
 private:
 	bool IsPickedUp = false;
-
+	bool IsNiagaraOn = false;
 
 
 	class UNiagaraComponent* BallNiagaraComponent;
 	
-
 };

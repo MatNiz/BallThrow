@@ -3,7 +3,7 @@
 
 #include "Ball.h"
 #include <Kismet/GameplayStatics.h>
-//#include "NiagaraComponent.h"
+#include "NiagaraComponent.h"
 
 // Sets default values
 ABall::ABall()
@@ -14,7 +14,15 @@ ABall::ABall()
 	BallMesh = CreateDefaultSubobject<UStaticMeshComponent>("BallMesh");
 	RootComponent = BallMesh;
 
-	//BallMesh->UseVelocityForRotation = true;
+	BallNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraFX"));
+	BallNiagaraComponent->SetupAttachment(RootComponent);
+
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NiagaraAsset(TEXT("NiagaraSystem'/Game/MyContent/NS_BallEffect.NS_BallEffect'"));
+	if (NiagaraAsset.Succeeded())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NiagaraAsset.Succeeded"));
+		BallNiagaraComponent->SetAsset(NiagaraAsset.Object);
+	}
 
 }
 
@@ -22,6 +30,7 @@ ABall::ABall()
 void ABall::BeginPlay()
 {
 	Super::BeginPlay();
+	BallNiagaraComponent->Deactivate();
 
 }
 
@@ -36,12 +45,22 @@ void ABall::Tick(float DeltaTime)
 
 }
 
+void ABall::ToggleNiagara()
+{
+	if(IsNiagaraOn)
+		BallNiagaraComponent->Deactivate();
+	else
+		BallNiagaraComponent->Activate();
+
+	IsNiagaraOn = !IsNiagaraOn;
+
+}
+
 
 void ABall::PickUp(AActor* Actor)
 {
 	if (IsPickedUp == false)
 	{
-		//BallNiagaraComponent->Activate();
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "PickUpBall");
 
 		BallMesh->SetSimulatePhysics(false);
