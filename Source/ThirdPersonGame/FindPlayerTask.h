@@ -7,7 +7,7 @@
 #include "FindPlayerTask.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Blueprintable)
 class THIRDPERSONGAME_API UFindPlayerTask : public UBTTask_BlackboardBase
@@ -17,12 +17,8 @@ class THIRDPERSONGAME_API UFindPlayerTask : public UBTTask_BlackboardBase
 public:
 	UFindPlayerTask(FObjectInitializer const& object_initializer);
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory);
-	
+
 private:
-	UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "Search", meta = (AllowPrivateAccess = " true"))
-		bool SearchRandom = false;
-
-	UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "Search", meta = (AllowPrivateAccess = " true"))
-		float SearchRadius = 150.0f;
-
+	UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "AI", meta = (AllowPrivateAccess = " true"))
+		float OffsetDistance = 100.0f;
 };

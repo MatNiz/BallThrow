@@ -9,6 +9,7 @@
 #include <Kismet/GameplayStatics.h>
 #include <Subsystems/PanelExtensionSubsystem.h>
 #include <Components/WidgetComponent.h>
+#include "BallCollectorCharacter.h"
 
 
 AMyCharacter::AMyCharacter()
@@ -86,7 +87,6 @@ void AMyCharacter::Tick(float DeltaTime)
 		}
 	}
 
-
 	TArray<AActor*> Array;
 	BallArray.Empty();
 
@@ -113,8 +113,6 @@ void AMyCharacter::Tick(float DeltaTime)
 
 void AMyCharacter::Interact()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, "E Pressed");
-
 	for (AActor* Actor : ChestNearbyArray)
 	{
 		AChest* Chest = Cast<AChest>(Actor);
@@ -127,41 +125,95 @@ void AMyCharacter::Interact()
 	for (AActor* Actor : BallArray)
 	{
 		ABall* Ball = Cast<ABall>(Actor);
-		if (Ball != nullptr && BallInHandBool == false)
+		if (Ball != nullptr && BallInHand == false)
 		{
-			Ball->DisablePhysicAndCollision(this);
+			Ball->PickUp(this);
 			BallInHandRef = Ball;
-			BallInHandBool = true;
-			PickUpBall(Ball);
+			BallThrown = false;
+			BallInHand = true;
+
+
+			FTransform SpawnTransform(FRotator(0, 0, 0), FVector(0, 0, 180), FVector(1, 1, 1));
+
+			GetWorld()->SpawnActor<ABallCollectorCharacter>(BallCollectorClass, SpawnTransform);
+			//Ball->DisablePhysicAndCollision();
+			//PickUpBall(Ball);
 		}
 	}
-
 }
-
 
 void AMyCharacter::ThrowBall()
 {
 	ABall* Ball = Cast<ABall>(BallInHandRef);
 	if (Ball != nullptr)
 	{
-		Ball->Throw(this);
-		BallInHandRef = nullptr;
-		BallInHandBool = false;
+		Ball->Throw(this, ThrowSpeed, ThrowZOffset);
+		BallThrown = true;
+		BallInHand = false;
+		//ThrowBall(BallInHandRef);
 	}
 }
 
-
-void AMyCharacter::PickUpBall(AActor* BallToPickUp)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "PickUpBall");
-
-	BallToPickUp->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "BallSocket");
-}
 
 AActor* AMyCharacter::GetBallInHandRef() const
 {
 	return BallInHandRef;
 }
+
+void AMyCharacter::ClearBallInHandRef()
+{
+	BallInHandRef = nullptr;
+}
+
+bool AMyCharacter::GetBallThrown()
+{
+	return BallThrown;
+}
+
+
+
+//void AMyCharacter::PickUpBall(AActor* BallToPickUp)
+//{
+//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "PickUpBall");
+//
+//	auto const BallMesh = BallToPickUp->FindComponentByClass<UStaticMeshComponent>();
+//	if (BallMesh)
+//	{
+//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "BallMesh");
+//		BallMesh->SetSimulatePhysics(false);
+//		BallMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+//	}
+//
+//
+//	BallThrown = false;
+//	BallToPickUp->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "BallSocket");
+//}
+
+//void AMyCharacter::ThrowBall(AActor* BallToPickUp)
+//{
+//	auto const BallMesh = BallToPickUp->FindComponentByClass<UStaticMeshComponent>();
+//	if (BallMesh)
+//	{
+//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "Ball throw");
+//
+//		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+//
+//		BallMesh->SetSimulatePhysics(true);
+//		BallMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+//
+//
+//		/*FRotator NewRotation = Actor->GetActorRotation();
+//		NewRotation.Add(50, 0, 0);
+//		SetActorRotation(NewRotation);*/
+//
+//
+//		FVector ThrowVelocity = this->GetActorForwardVector() * ThrowSpeed + FVector(0.0f, 0.0f, ThrowZOffset);
+//		BallMesh->SetPhysicsLinearVelocity(ThrowVelocity, false);
+//	}
+//
+//
+//}
+
 
 
 

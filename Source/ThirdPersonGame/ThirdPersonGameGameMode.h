@@ -14,6 +14,3 @@ class AThirdPersonGameGameMode : public AGameModeBase
 public:
 	AThirdPersonGameGameMode();
 };
-
-
-

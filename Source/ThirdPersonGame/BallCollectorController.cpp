@@ -42,3 +42,8 @@ UBlackboardComponent* ABallCollectorController::GetBlackboard() const
 {
 	return Blackboard;
 }
+
+float ABallCollectorController::GetInteractionDistance()
+{
+	return InteractionDistance;
+}
