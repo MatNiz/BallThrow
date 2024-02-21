@@ -11,7 +11,6 @@ AChest::AChest()
 	ChestMesh = CreateDefaultSubobject<UStaticMeshComponent>("ChestMesh");
 	RootComponent = ChestMesh;
 
-
 }
 
 // Called when the game starts or when spawned
@@ -65,6 +64,8 @@ void AChest::FarColorChange()
 
 void AChest::SpawnBall()
 {
+	UE_LOG(LogTemp, Warning, TEXT("ball spawned"));
+
 	FTransform SpawnTransform = GetActorTransform();
 
 	SpawnTransform.SetLocation(GetActorLocation() + GetActorForwardVector() * RandomFloat(MinSpawnOffset, MaxSpawnOffset) + FVector(0, 0, ZSpawnOffset));

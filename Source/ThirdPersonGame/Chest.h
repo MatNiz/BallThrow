@@ -33,7 +33,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Properties")
 		TSubclassOf<class ABall> BallClass;
 
-	class UStaticMeshComponent* ChestMesh;
+	UPROPERTY(EditAnywhere, Category = "Properties")
+		class UStaticMeshComponent* ChestMesh;
+
 	class UStaticMesh* ChestClosedMesh;
 	class UStaticMesh* ChestOpenMesh;
 
