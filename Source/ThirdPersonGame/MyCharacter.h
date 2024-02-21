@@ -23,12 +23,10 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	//UPROPERTY(EditAnywhere)
-	//UUserWidget* BallCounterWidget;
 
 	class AActor* GetBallInHandRef() const;
 	void ClearBallInHandRef();
-	bool GetBallThrown();
+	bool GetBallInHand();
 
 private:
 	void MoveForward(float Value);
@@ -53,7 +51,6 @@ private:
 
 	FVector BallCollectorSpawnLocation = FVector(0, 0, 180);
 
-	bool BallThrown = false;
 	bool BallInHand = false;
 
 	float InteractionDistance = 150.0f;
@@ -62,11 +59,6 @@ private:
 	float ThrowZOffset = 800.0f;
 
 	class UBallCounterWidget* BallCounterWidget;
-
-
-	//UPROPERTY(EditAnywhere, Category = "Properties")
-//	AChest& MyChestInstanceRef = *MyChestInstancePointer;
-
 
 
 };

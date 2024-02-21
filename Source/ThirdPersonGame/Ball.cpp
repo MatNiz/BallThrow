@@ -3,6 +3,7 @@
 
 #include "Ball.h"
 #include <Kismet/GameplayStatics.h>
+//#include "NiagaraComponent.h"
 
 // Sets default values
 ABall::ABall()
@@ -12,6 +13,8 @@ ABall::ABall()
 
 	BallMesh = CreateDefaultSubobject<UStaticMeshComponent>("BallMesh");
 	RootComponent = BallMesh;
+
+	//BallMesh->UseVelocityForRotation = true;
 
 }
 
@@ -27,6 +30,10 @@ void ABall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FVector Velocity = BallMesh->GetPhysicsLinearVelocity();
+	FRotator NewRotation = Velocity.Rotation();
+	BallMesh->SetWorldRotation(NewRotation);
+
 }
 
 
@@ -34,11 +41,11 @@ void ABall::PickUp(AActor* Actor)
 {
 	if (IsPickedUp == false)
 	{
+		//BallNiagaraComponent->Activate();
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "PickUpBall");
 
 		BallMesh->SetSimulatePhysics(false);
 		BallMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
 
 		auto const ActorMesh = Actor->FindComponentByClass<USkeletalMeshComponent>();
 
@@ -58,10 +65,6 @@ void ABall::Throw(AActor* Actor, float ThrowSpeed, float ThrowZOffset)
 
 		BallMesh->SetSimulatePhysics(true);
 		BallMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-
-		/*FRotator NewRotation = Actor->GetActorRotation();
-		NewRotation.Add(50, 0, 0);
-		SetActorRotation(NewRotation);*/
 
 		FVector ThrowVelocity = Actor->GetActorForwardVector() * ThrowSpeed + FVector(0.0f, 0.0f, ThrowZOffset);
 		BallMesh->SetPhysicsLinearVelocity(ThrowVelocity, false);

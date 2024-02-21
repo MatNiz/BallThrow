@@ -29,9 +29,7 @@ void AMyCharacter::BeginPlay()
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChest::StaticClass(), ChessArray);
 	}
 
-
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-
 	if (PlayerController)
 	{
 		AHUD* PlayerHUD = PlayerController->GetHUD();
@@ -43,13 +41,11 @@ void AMyCharacter::BeginPlay()
 				UUserWidget* UserWidget = MyHUD->GetUIWidget();
 				if (UserWidget)
 				{
-					//UBallCounterWidget* MyWidget = Cast<UBallCounterWidget>(UserWidget);
 					BallCounterWidget = Cast<UBallCounterWidget>(UserWidget);
 				}
 			}
 		}
 	}
-
 
 }
 
@@ -126,7 +122,6 @@ void AMyCharacter::Interact()
 			Ball->PickUp(this);
 			//BallInHandRef = Ball;
 			ActorInHandRef = Ball;
-			BallThrown = false;
 			BallInHand = true;
 
 			BallCounterWidget->ChangeBallCounterText(FText::FromString("Ball: 1"));
@@ -142,7 +137,6 @@ void AMyCharacter::ThrowBall()
 	if (Ball != nullptr && BallInHand == true)
 	{
 		Ball->Throw(this, ThrowSpeed, ThrowZOffset);
-		BallThrown = true;
 		BallInHand = false;
 
 		BallCounterWidget->ChangeBallCounterText(FText::FromString("Ball: 0"));
@@ -173,9 +167,9 @@ void AMyCharacter::ClearBallInHandRef()
 	ActorInHandRef = nullptr;
 }
 
-bool AMyCharacter::GetBallThrown()
+bool AMyCharacter::GetBallInHand()
 {
-	return BallThrown;
+	return BallInHand;
 }
 
 

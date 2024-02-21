@@ -21,7 +21,7 @@ EBTNodeResult::Type UFindBallTask::ExecuteTask(UBehaviorTreeComponent& owner_com
 	auto const MyCharacter = Cast<AMyCharacter>(Player);
 	auto SearchedBall = MyCharacter->GetBallInHandRef();
 
-	if (MyCharacter->GetBallThrown() && SearchedBall)
+	if (MyCharacter->GetBallInHand() == false && SearchedBall)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ball throw true && searched ball przekazana"));
 

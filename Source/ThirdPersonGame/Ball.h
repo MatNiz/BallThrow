@@ -36,8 +36,8 @@ private:
 	bool IsPickedUp = false;
 
 
-	/*UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "AI", meta = (AllowPrivateAccess = " true"))
+
 	class UNiagaraComponent* BallNiagaraComponent;
-	*/
+	
 
 };

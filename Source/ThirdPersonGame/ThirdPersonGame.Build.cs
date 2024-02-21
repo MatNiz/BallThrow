@@ -19,6 +19,7 @@ public class ThirdPersonGame : ModuleRules
             "NavigationSystem",
             "UMG",
             "Slate",
-            "SlateCore"});
+            "SlateCore",
+            "Niagara"});
     }
 }
