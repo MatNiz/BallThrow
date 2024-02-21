@@ -4,14 +4,15 @@
 #include "MyCharacter.h"
 #include "Chest.h"
 #include "Ball.h"
-#include "BallCounterWidget.h"
 #include <EngineUtils.h>
 #include <Kismet/GameplayStatics.h>
 #include <Subsystems/PanelExtensionSubsystem.h>
 #include <Components/WidgetComponent.h>
 #include "BallCollectorCharacter.h"
 #include "BallCollectorController.h"
-
+#include "GameFramework/HUD.h"
+#include "BallCounterHUD.h"
+#include "BallCounterWidget.h"
 
 AMyCharacter::AMyCharacter()
 {
@@ -23,39 +24,32 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//BallCounterWidget = FPanelExtensionFactory::CreateWidget<UUserWidget>(GetWorld(), BP_BallCounterWidget);
-
-
-	//static ConstructorHelpers::FObjectFinder<UUserWidget> obj(TEXT("WidgetBlueprint'/Game/MyContent/Blueprints/BP_BallCounterWidget.BP_BallCounterWidget'"));
-
-	//// Wczytanie klasy widgetu
-	//TSubclassOf<UUserWidget> WidgetClass = BallCounterWidget;
-
-	//TSubclassOf<UUserWidget> WidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("WidgetBlueprint'/Game/MyContent/Blueprints/BP_BallCounterWidget.BP_BallCounterWidget_C'"));
-
-	//TSubclassOf<UUserWidget> WidgetClass = LoadClass<UUserWidget>(nullptr, "/Game/MyContent/Blueprints/BP_BallCounterWidget.BP_BallCounterWidget_C");
-
-	//TSubclassOf<UUserWidget> WidgetClass = BP_BallCounterWidget_C;
-
-
-	//// Utworzenie instancji widgetu
-	//UUserWidget* WidgetInstance = CreateWidget<UUserWidget>(this, BallCounterWidget);
-
-	//// Dodanie widgetu do widoku
-	//BallCounterWidget->AddToViewport();
-
-	// SprawdŸ, czy widget zosta³ poprawnie utworzony
-	//if (BallCounterWidget)
-	//{
-	//	// Dodaj widget do widoku gracza
-	//	BallCounterWidget->AddToViewport();
-	//}
-
-
 	if (UWorld* World = GetWorld())
 	{
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChest::StaticClass(), ChessArray);
 	}
+
+
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	if (PlayerController)
+	{
+		AHUD* PlayerHUD = PlayerController->GetHUD();
+		if (PlayerHUD)
+		{
+			ABallCounterHUD* MyHUD = Cast<ABallCounterHUD>(PlayerHUD);
+			if (MyHUD)
+			{
+				UUserWidget* UserWidget = MyHUD->GetUIWidget();
+				if (UserWidget)
+				{
+					//UBallCounterWidget* MyWidget = Cast<UBallCounterWidget>(UserWidget);
+					BallCounterWidget = Cast<UBallCounterWidget>(UserWidget);
+				}
+			}
+		}
+	}
+
 
 }
 
@@ -135,6 +129,8 @@ void AMyCharacter::Interact()
 			BallThrown = false;
 			BallInHand = true;
 
+			BallCounterWidget->ChangeBallCounterText(FText::FromString("Ball: 1"));
+
 			SpawnNewBallCollector();
 		}
 	}
@@ -148,6 +144,8 @@ void AMyCharacter::ThrowBall()
 		Ball->Throw(this, ThrowSpeed, ThrowZOffset);
 		BallThrown = true;
 		BallInHand = false;
+
+		BallCounterWidget->ChangeBallCounterText(FText::FromString("Ball: 0"));
 	}
 }
 

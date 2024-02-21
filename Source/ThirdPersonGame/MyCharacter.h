@@ -61,6 +61,8 @@ private:
 	float ThrowSpeed = 1000.0f;
 	float ThrowZOffset = 800.0f;
 
+	class UBallCounterWidget* BallCounterWidget;
+
 
 	//UPROPERTY(EditAnywhere, Category = "Properties")
 //	AChest& MyChestInstanceRef = *MyChestInstancePointer;

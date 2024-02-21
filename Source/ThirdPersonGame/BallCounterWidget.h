@@ -13,5 +13,15 @@ UCLASS()
 class THIRDPERSONGAME_API UBallCounterWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+public:
+	void NativeConstruct() override;
+
+	UFUNCTION()
+		void ChangeBallCounterText(FText text);
+
+protected:
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UTextBlock* BallCounterText;
+
 };

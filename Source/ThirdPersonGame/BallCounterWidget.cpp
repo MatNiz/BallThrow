@@ -2,4 +2,18 @@
 
 
 #include "BallCounterWidget.h"
+#include "Runtime/UMG/Public/Components/TextBlock.h"
+
+void UBallCounterWidget::NativeConstruct()
+{
+
+}
+
+void UBallCounterWidget::ChangeBallCounterText(FText text)
+{
+	if (BallCounterText)
+	{
+		BallCounterText->SetText(text);
+	}
+}
 
