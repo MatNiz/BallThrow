@@ -23,7 +23,7 @@ EBTNodeResult::Type UFindBallTask::ExecuteTask(UBehaviorTreeComponent& owner_com
 
 	if (MyCharacter->GetBallInHand() == false && SearchedBall)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ball throw true && searched ball przekazana"));
+//		UE_LOG(LogTemp, Warning, TEXT("ball throw true && searched ball przekazana"));
 
 		Controller->GetBlackboard()->SetValueAsBool(BlackboardKeysNamespace::move_to_ball, true);
 		Controller->GetBlackboard()->SetValueAsObject(BlackboardKeysNamespace::ball_ref, SearchedBall);

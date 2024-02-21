@@ -64,13 +64,10 @@ void AChest::FarColorChange()
 
 void AChest::SpawnBall()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ball spawned"));
-
 	FTransform SpawnTransform = GetActorTransform();
 
 	SpawnTransform.SetLocation(GetActorLocation() + GetActorForwardVector() * RandomFloat(MinSpawnOffset, MaxSpawnOffset) + FVector(0, 0, ZSpawnOffset));
 	GetWorld()->SpawnActor<ABall>(BallClass, SpawnTransform);
-
 }
 
 float AChest::RandomFloat(float Min, float Max)

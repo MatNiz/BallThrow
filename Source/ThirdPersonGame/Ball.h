@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
 #pragma once
+
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -27,16 +29,21 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Properties")
 		class UStaticMeshComponent* BallMesh;
 
-	//void DisablePhysicAndCollision();
 	void Throw(AActor* Actor, float ThrowSpeed, float ThrowZOffset);
 	void PickUp(AActor* Actor);
 	void ToggleNiagara();
 
 private:
 	bool IsPickedUp = false;
+	bool IsInTheAir = false;
+	bool FirstHit = true;
+
 	bool IsNiagaraOn = false;
 
-
 	class UNiagaraComponent* BallNiagaraComponent;
+
+	UFUNCTION()
+		void OnBallHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 	
 };
