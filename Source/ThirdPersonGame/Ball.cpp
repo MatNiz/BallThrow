@@ -16,7 +16,7 @@ ABall::ABall()
 	BallMesh = CreateDefaultSubobject<UStaticMeshComponent>("BallMesh");
 	RootComponent = BallMesh;
 
-	BallNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraFX"));
+	BallNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BallNiagaraComponent"));
 	BallNiagaraComponent->SetupAttachment(RootComponent);
 
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NiagaraAsset(TEXT("NiagaraSystem'/Game/MyContent/NS_BallEffect.NS_BallEffect'"));
@@ -31,8 +31,8 @@ ABall::ABall()
 void ABall::BeginPlay()
 {
 	Super::BeginPlay();
-	BallNiagaraComponent->Deactivate();
 
+	BallNiagaraComponent->Deactivate();
 	BallMesh->OnComponentHit.AddDynamic(this, &ABall::OnBallHit);
 }
 
@@ -51,7 +51,6 @@ void ABall::Tick(float DeltaTime)
 
 void ABall::ToggleNiagara()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ToggleNiagara"));
 	if(IsNiagaraOn)
 		BallNiagaraComponent->Deactivate();
 	else

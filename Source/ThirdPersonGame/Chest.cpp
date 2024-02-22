@@ -38,7 +38,7 @@ void AChest::Tick(float DeltaTime)
 
 void AChest::ChestInteracton()
 {
-	if (Open == false)
+	if (ChestStateBool == false)
 	{
 		SpawnBall();
 		ChestMesh->SetStaticMesh(ChestOpenMesh);
@@ -47,12 +47,12 @@ void AChest::ChestInteracton()
 	{
 		ChestMesh->SetStaticMesh(ChestClosedMesh);
 	}
-	Open = !Open;
+	ChestStateBool = !ChestStateBool;
 }
 
-bool AChest::GetChestState()
+bool AChest::GetChestStateBool()
 {
-	return Open;
+	return ChestStateBool;
 }
 
 

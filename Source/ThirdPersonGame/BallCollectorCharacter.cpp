@@ -2,7 +2,6 @@
 
 
 #include "BallCollectorCharacter.h"
-#include "BallCollectorController.h"
 
 // Sets default values
 ABallCollectorCharacter::ABallCollectorCharacter()

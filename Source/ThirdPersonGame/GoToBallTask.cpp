@@ -22,23 +22,18 @@ EBTNodeResult::Type UGoToBallTask::ExecuteTask(UBehaviorTreeComponent& owner_com
 
 	if (BallRef)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("BallRef true"));
 		auto BallLocation = BallRef->GetActorLocation();
-
 		Controller->GetBlackboard()->SetValueAsVector(BlackboardKeysNamespace::target_location, BallLocation);
 
 		float DistanceToActor = (BallCollectorPawn->GetActorLocation() - BallLocation).Size();
 
 		if (DistanceToActor <= Controller->GetInteractionDistance())
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("distacne good"));
 			ABall* Ball = Cast<ABall>(BallRef);
 			if (Ball != nullptr)
 			{
-				//UE_LOG(LogTemp, Warning, TEXT("casted good"));
 				Ball->PickUp(BallCollectorPawn);
-//				Ball->ToggleNiagara();
-				Controller->GetBlackboard()->SetValueAsBool(BlackboardKeysNamespace::move_to_player, true);
+				Controller->GetBlackboard()->SetValueAsBool(BlackboardKeysNamespace::move_to_player_bool, true);
 			}
 		}
 	}

@@ -22,14 +22,9 @@ public:
 	float GetInteractionDistance();
 
 private:
-	UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "AI", meta = (AllowPrivateAccess = " true"))
-		class UBehaviorTreeComponent* BehaviorTreeComponent;
-
-	UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "AI", meta = (AllowPrivateAccess = " true"))
-		class UBehaviorTree* BehaviorTree;
-
+	class UBehaviorTreeComponent* BehaviorTreeComponent;
+	class UBehaviorTree* BehaviorTree;
 	class UBlackboardComponent* Blackboard;
 
-	UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "AI", meta = (AllowPrivateAccess = " true"))
-		float InteractionDistance = 200.0f;
+	float InteractionDistance = 200.0f;
 };

@@ -31,11 +31,9 @@ EBTNodeResult::Type UFindPlayerTask::ExecuteTask(UBehaviorTreeComponent& owner_c
 
 	if (DistanceToActor <= Controller->GetInteractionDistance())
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("distacne back good"));
 		ABall* Ball = Cast<ABall>(BallRef);
 		if (Ball != nullptr)
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("casted good"));
 			Ball->Throw(BallCollectorPawn, 100, 1);
 			BallCollectorPawn->Destroy();
 		}

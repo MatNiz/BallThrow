@@ -19,13 +19,11 @@ EBTNodeResult::Type UFindBallTask::ExecuteTask(UBehaviorTreeComponent& owner_com
 
 	ACharacter* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	auto const MyCharacter = Cast<AMyCharacter>(Player);
-	auto SearchedBall = MyCharacter->GetBallInHandRef();
+	auto SearchedBall = MyCharacter->GetActorInHandRef();
 
 	if (MyCharacter->GetBallInHandBool() == false && SearchedBall)
 	{
-//		UE_LOG(LogTemp, Warning, TEXT("ball throw true && searched ball przekazana"));
-
-		Controller->GetBlackboard()->SetValueAsBool(BlackboardKeysNamespace::move_to_ball, true);
+		Controller->GetBlackboard()->SetValueAsBool(BlackboardKeysNamespace::move_to_ball_bool, true);
 		Controller->GetBlackboard()->SetValueAsObject(BlackboardKeysNamespace::ball_ref, SearchedBall);
 
 		MyCharacter->ClearBallInHandRef();

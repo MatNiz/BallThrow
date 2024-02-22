@@ -25,7 +25,7 @@ public:
 
 
 	void ChestInteracton();
-	bool GetChestState();
+	bool GetChestStateBool();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Properties")
@@ -40,14 +40,12 @@ private:
 	UMaterialInstanceDynamic* DynamicMaterialInstance;
 	UMaterialInterface* OriginalMaterial;
 
-	bool Open = false;
+	bool ChestStateBool = false;
 
 	float MinSpawnOffset = 85.0f;
 	float MaxSpawnOffset = 115.0f;
 	float ZSpawnOffset = 50.0f;
 
-
 	void SpawnBall();
 	float RandomFloat(float Min, float Max);
-
 };

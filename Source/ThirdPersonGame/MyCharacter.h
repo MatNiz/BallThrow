@@ -24,21 +24,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	class AActor* GetBallInHandRef() const;
+	class AActor* GetActorInHandRef() const;
 	void ClearBallInHandRef();
 	bool GetBallInHandBool();
 
 private:
-	void MoveForward(float Value);
-	void MoveRight(float Value);
-	void Interact();
-	void ThrowBall();
-	void SpawnNewBallCollector();
-	void NearestActorHandling();
-
-	//class ABall* BallInHandRef;
-	AActor* ActorInHandRef;
-
 	UPROPERTY(EditAnywhere, Category = "Properties")
 		TSubclassOf<class ABallCollectorCharacter> BallCollectorClass;
 
@@ -46,7 +36,10 @@ private:
 		TSubclassOf<class ABallCollectorController> BallCollectorControllerClass;
 
 
+	AActor* ActorInHandRef;
 	AActor* NearestActor;
+
+	class UBallCounterWidget* BallCounterWidget;
 
 	FVector BallCollectorSpawnLocation = FVector(0, 0, 180);
 
@@ -57,6 +50,11 @@ private:
 	float ThrowSpeed = 800.0f;
 	float ThrowZOffset = 800.0f;
 
-	class UBallCounterWidget* BallCounterWidget;
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+	void Interact();
+	void ThrowBall();
+	void SpawnNewBallCollector();
+	void NearestActorHandling();
 
 };

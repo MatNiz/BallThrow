@@ -6,7 +6,7 @@
 namespace BlackboardKeysNamespace
 {
 	TCHAR const* const target_location = TEXT("TargetLocation");
-	TCHAR const* const move_to_ball = TEXT("MoveToBall");
-	TCHAR const* const move_to_player = TEXT("MoveToPlayer");
+	TCHAR const* const move_to_ball_bool = TEXT("MoveToBallBool");
+	TCHAR const* const move_to_player_bool = TEXT("MoveToPlayerBool");
 	TCHAR const* const ball_ref = TEXT("BallReference");
 }

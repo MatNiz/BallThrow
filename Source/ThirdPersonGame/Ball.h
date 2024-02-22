@@ -34,15 +34,16 @@ public:
 	void ToggleNiagara();
 
 private:
+	class UNiagaraComponent* BallNiagaraComponent;
+
+
 	bool IsPickedUp = false;
 	bool IsInTheAir = false;
 
 	bool IsNiagaraOn = false;
 
-	class UNiagaraComponent* BallNiagaraComponent;
 
 	UFUNCTION()
-		void OnBallHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	void OnBallHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	
 };

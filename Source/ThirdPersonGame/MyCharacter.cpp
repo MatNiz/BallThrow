@@ -78,7 +78,6 @@ void AMyCharacter::Tick(float DeltaTime)
 
 	if (NearestDistance >= InteractionDistance)
 	{
-		NearestDistance = MAX_FLT;
 		NearestActor = nullptr;
 	}
 
@@ -92,7 +91,7 @@ void AMyCharacter::NearestActorHandling()
 	{
 		if (AChest* Chest = Cast<AChest>(NearestActor))
 		{
-			if (Chest->GetChestState())
+			if (Chest->GetChestStateBool())
 				BallCounterWidget->ChangeInteractionText(FText::FromString("E: Close Chest"));
 			else
 				BallCounterWidget->ChangeInteractionText(FText::FromString("E: Open Chest"));
@@ -112,6 +111,7 @@ void AMyCharacter::NearestActorHandling()
 
 void AMyCharacter::Interact()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Interaction"));//////////////////////////////////////////////////////////////////
 	if (NearestActor)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Interaction"));
@@ -160,7 +160,7 @@ void AMyCharacter::SpawnNewBallCollector()
 }
 
 
-AActor* AMyCharacter::GetBallInHandRef() const
+AActor* AMyCharacter::GetActorInHandRef() const
 {
 	return ActorInHandRef;
 }
