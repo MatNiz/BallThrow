@@ -87,7 +87,7 @@ void AMyCharacter::Tick(float DeltaTime)
 
 void AMyCharacter::NearestActorHandling()
 {
-	if (NearestActor)
+	if (NearestActor && BallInHandBool == false)
 	{
 		if (AChest* Chest = Cast<AChest>(NearestActor))
 		{
@@ -111,11 +111,8 @@ void AMyCharacter::NearestActorHandling()
 
 void AMyCharacter::Interact()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Interaction"));//////////////////////////////////////////////////////////////////
 	if (NearestActor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Interaction"));
-
 		if (AChest* Chest = Cast<AChest>(NearestActor))
 		{
 			Chest->ChestInteracton();
