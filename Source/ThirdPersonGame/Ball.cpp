@@ -63,9 +63,8 @@ void ABall::ToggleNiagara()
  
 void ABall::OnBallHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (FirstHit)
+	if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(OtherActor))
 	{
-		FirstHit = false;
 	}
 	else
 	{
@@ -101,8 +100,6 @@ void ABall::Throw(AActor* Actor, float ThrowSpeed, float ThrowZOffset)
 
 		BallMesh->SetSimulatePhysics(true);
 		BallMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		BallMesh->SetCollisionProfileName("BlockAll");
-		BallMesh->SetGenerateOverlapEvents(true);
 		BallMesh->SetNotifyRigidBodyCollision(true);
 
 		FVector ThrowVelocity = Actor->GetActorForwardVector() * ThrowSpeed + FVector(0.0f, 0.0f, ThrowZOffset);
@@ -114,7 +111,6 @@ void ABall::Throw(AActor* Actor, float ThrowSpeed, float ThrowZOffset)
 		if (AMyCharacter* MyCharacter = Cast<AMyCharacter>(Actor))
 		{
 			IsInTheAir = true;
-			FirstHit = true;
 		}
 	}
 }

@@ -24,10 +24,6 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (UWorld* World = GetWorld())
-	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChest::StaticClass(), ChessArray);
-	}
 
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (PlayerController)
@@ -53,79 +49,87 @@ void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	TArray<AActor*> FoundActors;
+	TArray<AActor*> AllChests;
+	TArray<AActor*> AllBalls;
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChest::StaticClass(), AllChests);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABall::StaticClass(), AllBalls);
+
+	FoundActors.Append(AllChests);
+	FoundActors.Append(AllBalls);
+
 	FVector CharacterLocation = GetActorLocation();
-	ChestNearbyArray.Empty();
 
-	for (AActor* Actor : ChessArray)
+	float NearestDistance = MAX_FLT;
+	NearestActor = nullptr;
+
+	for (AActor* Actor : FoundActors)
 	{
-		/*FString VariableValueAsString = FString::Printf(TEXT("Wartoœæ zmiennej: %f"), DistanceToWantedActor);
-		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, VariableValueAsString);*/
+		float DistanceToPlayer = FVector::Distance(Actor->GetActorLocation(), CharacterLocation);
 
-		AChest* Chest = Cast<AChest>(Actor);
-		if (Chest != nullptr)
+		if (DistanceToPlayer < NearestDistance)
 		{
-			FVector ActorLocation = Actor->GetActorLocation();
-			float DistanceToWantedActor = (ActorLocation - CharacterLocation).Size();
-			if (DistanceToWantedActor <= InteractionDistance)
-			{
-				Chest->CloseColorChange();
-				ChestNearbyArray.Add(Actor);
-			}
+			NearestDistance = DistanceToPlayer;
+			NearestActor = Actor;
+		}
+	}
+
+	if (NearestDistance >= InteractionDistance)
+	{
+		NearestDistance = MAX_FLT;
+		NearestActor = nullptr;
+	}
+
+	NearestActorHandling();
+}
+
+
+void AMyCharacter::NearestActorHandling()
+{
+	if (NearestActor)
+	{
+		if (AChest* Chest = Cast<AChest>(NearestActor))
+		{
+			if (Chest->GetChestState())
+				BallCounterWidget->ChangeInteractionText(FText::FromString("E: Close Chest"));
 			else
-			{
-				Chest->FarColorChange();
-			}
+				BallCounterWidget->ChangeInteractionText(FText::FromString("E: Open Chest"));
 		}
-	}
 
-	TArray<AActor*> Array;
-	BallArray.Empty();
-
-	if (UWorld* World = GetWorld())
-	{
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABall::StaticClass(), Array);
-	}
-
-	for (AActor* Actor : Array)
-	{
-		/*FString VariableValueAsString = FString::Printf(TEXT("Wartoœæ zmiennej: %f"), DistanceToWantedActor);
-		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, VariableValueAsString);*/
-
-		FVector ActorLocation = Actor->GetActorLocation();
-		float DistanceToWantedActor = (ActorLocation - CharacterLocation).Size();
-		if (DistanceToWantedActor <= InteractionDistance)
+		if (ABall* Ball = Cast<ABall>(NearestActor))
 		{
-			BallArray.Add(Actor);
+			BallCounterWidget->ChangeInteractionText(FText::FromString("E: Pick Up Ball"));
 		}
 	}
-
+	else
+	{
+		BallCounterWidget->HideInteractionText();
+	}
 }
 
 
 void AMyCharacter::Interact()
 {
-	for (AActor* Actor : ChestNearbyArray)
+	if (NearestActor)
 	{
-		AChest* Chest = Cast<AChest>(Actor);
-		if (Chest != nullptr)
+		UE_LOG(LogTemp, Warning, TEXT("Interaction"));
+
+		if (AChest* Chest = Cast<AChest>(NearestActor))
 		{
 			Chest->ChestInteracton();
 		}
-	}
 
-	for (AActor* Actor : BallArray)
-	{
-		ABall* Ball = Cast<ABall>(Actor);
-		//BallInHandRef = Cast<ABall>(Actor);
-		if (Ball != nullptr && BallInHand == false)
+		ABall* Ball = Cast<ABall>(NearestActor);
+		if (Ball && BallInHandBool == false)
 		{
 			Ball->PickUp(this);
 			//BallInHandRef = Ball;
 			ActorInHandRef = Ball;
-			BallInHand = true;
+			BallInHandBool = true;
 
 			BallCounterWidget->ChangeBallCounterText(FText::FromString("Ball: 1"));
-
 			SpawnNewBallCollector();
 		}
 	}
@@ -134,11 +138,11 @@ void AMyCharacter::Interact()
 void AMyCharacter::ThrowBall()
 {
 	ABall* Ball = Cast<ABall>(ActorInHandRef);
-	if (Ball != nullptr && BallInHand == true)
+	if (Ball != nullptr && BallInHandBool == true)
 	{
 		Ball->Throw(this, ThrowSpeed, ThrowZOffset);
 		Ball->ToggleNiagara();
-		BallInHand = false;
+		BallInHandBool = false;
 
 		BallCounterWidget->ChangeBallCounterText(FText::FromString("Ball: 0"));
 	}
@@ -156,8 +160,6 @@ void AMyCharacter::SpawnNewBallCollector()
 }
 
 
-
-
 AActor* AMyCharacter::GetBallInHandRef() const
 {
 	return ActorInHandRef;
@@ -168,9 +170,9 @@ void AMyCharacter::ClearBallInHandRef()
 	ActorInHandRef = nullptr;
 }
 
-bool AMyCharacter::GetBallInHand()
+bool AMyCharacter::GetBallInHandBool()
 {
-	return BallInHand;
+	return BallInHandBool;
 }
 
 

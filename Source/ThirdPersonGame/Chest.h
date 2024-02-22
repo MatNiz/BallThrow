@@ -25,9 +25,7 @@ public:
 
 
 	void ChestInteracton();
-	void CloseColorChange();
-	void FarColorChange();
-
+	bool GetChestState();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Properties")

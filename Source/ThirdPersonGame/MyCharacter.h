@@ -26,7 +26,7 @@ public:
 
 	class AActor* GetBallInHandRef() const;
 	void ClearBallInHandRef();
-	bool GetBallInHand();
+	bool GetBallInHandBool();
 
 private:
 	void MoveForward(float Value);
@@ -34,7 +34,7 @@ private:
 	void Interact();
 	void ThrowBall();
 	void SpawnNewBallCollector();
-
+	void NearestActorHandling();
 
 	//class ABall* BallInHandRef;
 	AActor* ActorInHandRef;
@@ -45,20 +45,18 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Properties")
 		TSubclassOf<class ABallCollectorController> BallCollectorControllerClass;
 
-	TArray<AActor*> ChessArray;
-	TArray<AActor*> ChestNearbyArray;
-	TArray<AActor*> BallArray;
+
+	AActor* NearestActor;
 
 	FVector BallCollectorSpawnLocation = FVector(0, 0, 180);
 
-	bool BallInHand = false;
+	bool BallInHandBool = false;
 
 	float InteractionDistance = 150.0f;
 
-	float ThrowSpeed = 1000.0f;
+	float ThrowSpeed = 800.0f;
 	float ThrowZOffset = 800.0f;
 
 	class UBallCounterWidget* BallCounterWidget;
-
 
 };

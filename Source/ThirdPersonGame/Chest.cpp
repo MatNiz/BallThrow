@@ -50,15 +50,9 @@ void AChest::ChestInteracton()
 	Open = !Open;
 }
 
-void AChest::CloseColorChange()
+bool AChest::GetChestState()
 {
-	DynamicMaterialInstance->SetVectorParameterValue("Color", FLinearColor::Green);
-
-}
-
-void AChest::FarColorChange()
-{
-	DynamicMaterialInstance->SetVectorParameterValue("Color", FLinearColor::White);
+	return Open;
 }
 
 

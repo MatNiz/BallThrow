@@ -20,8 +20,17 @@ public:
 	UFUNCTION()
 		void ChangeBallCounterText(FText text);
 
+	UFUNCTION()
+		void ChangeInteractionText(FText text);
+
+	UFUNCTION()
+		void HideInteractionText();
+
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UTextBlock* BallCounterText;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UTextBlock* InteractionText;
 
 };

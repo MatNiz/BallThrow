@@ -36,7 +36,6 @@ public:
 private:
 	bool IsPickedUp = false;
 	bool IsInTheAir = false;
-	bool FirstHit = true;
 
 	bool IsNiagaraOn = false;
 

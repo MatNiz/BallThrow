@@ -17,3 +17,20 @@ void UBallCounterWidget::ChangeBallCounterText(FText text)
 	}
 }
 
+void UBallCounterWidget::ChangeInteractionText(FText text)
+{
+	if (InteractionText)
+	{
+		InteractionText->SetVisibility(ESlateVisibility::Visible);
+		InteractionText->SetText(text);
+	}
+}
+
+void UBallCounterWidget::HideInteractionText()
+{
+	if (InteractionText)
+	{
+		InteractionText->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
+
