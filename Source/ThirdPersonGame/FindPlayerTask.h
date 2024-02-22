@@ -20,5 +20,5 @@ public:
 
 private:
 	UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "AI", meta = (AllowPrivateAccess = " true"))
-		float OffsetDistance = 100.0f;
+		float OffsetDistance = 150.0f;
 };
