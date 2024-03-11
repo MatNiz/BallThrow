@@ -17,20 +17,16 @@ class THIRDPERSONGAME_API UBallCounterWidget : public UUserWidget
 public:
 	void NativeConstruct() override;
 
-	UFUNCTION()
-		void ChangeBallCounterText(FText text);
 
-	UFUNCTION()
-		void ChangeInteractionText(FText text);
-
-	UFUNCTION()
-		void HideInteractionText();
+	void ChangeBallCounterText(FText text);
+	void ChangeInteractionText(FText text);
+	void HideInteractionText();
 
 protected:
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* BallCounterText;
 
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* InteractionText;
 
 };

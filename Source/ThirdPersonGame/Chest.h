@@ -28,13 +28,13 @@ public:
 	bool GetChestStateBool();
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Properties")
+	UPROPERTY(EditDefaultsOnly, Category = "References")
 		TSubclassOf<class ABall> BallClass;
-
-	UPROPERTY(EditAnywhere, Category = "Properties")
+	UPROPERTY(EditDefaultsOnly, Category = "Properties")
 		class UStaticMeshComponent* ChestMesh;
-
+	UPROPERTY(EditDefaultsOnly, Category = "Properties")
 	class UStaticMesh* ChestClosedMesh;
+	UPROPERTY(EditDefaultsOnly, Category = "Properties")
 	class UStaticMesh* ChestOpenMesh;
 
 	UMaterialInstanceDynamic* DynamicMaterialInstance;

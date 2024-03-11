@@ -29,12 +29,10 @@ public:
 	bool GetBallInHandBool();
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Properties")
+	UPROPERTY(EditDefaultsOnly, Category = "References")
 		TSubclassOf<class ABallCollectorCharacter> BallCollectorClass;
-
-	UPROPERTY(EditAnywhere, Category = "Properties")
+	UPROPERTY(EditDefaultsOnly, Category = "References")
 		TSubclassOf<class ABallCollectorController> BallCollectorControllerClass;
-
 
 	AActor* ActorInHandRef;
 	AActor* NearestActor;

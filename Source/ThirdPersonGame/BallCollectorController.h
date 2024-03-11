@@ -17,6 +17,7 @@ class THIRDPERSONGAME_API ABallCollectorController : public AAIController
 public:
 	ABallCollectorController(FObjectInitializer const& object_initializer = FObjectInitializer::Get());
 	void BeginPlay() override;
+
 	void OnPossess(APawn* const MyPawn) override;
 	class UBlackboardComponent* GetBlackboard() const;
 	float GetInteractionDistance();

@@ -19,9 +19,6 @@ void AChest::BeginPlay()
 	Super::BeginPlay();
 
 
-	ChestClosedMesh = LoadObject<UStaticMesh>(nullptr, TEXT("StaticMesh'/Game/MyContent/Meshes/SM_ChestClosed.SM_ChestClosed'"));
-	ChestOpenMesh = LoadObject<UStaticMesh>(nullptr, TEXT("StaticMesh'/Game/MyContent/Meshes/SM_ChestOpen.SM_ChestOpen'"));
-
 	ChestMesh->SetStaticMesh(ChestClosedMesh);
 
 	OriginalMaterial = ChestMesh->GetMaterial(0);

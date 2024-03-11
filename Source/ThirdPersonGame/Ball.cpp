@@ -15,15 +15,8 @@ ABall::ABall()
 
 	BallMesh = CreateDefaultSubobject<UStaticMeshComponent>("BallMesh");
 	RootComponent = BallMesh;
-
-	BallNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("BallNiagaraComponent"));
+	BallNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>("BallNiagaraComponent");
 	BallNiagaraComponent->SetupAttachment(RootComponent);
-
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NiagaraAsset(TEXT("NiagaraSystem'/Game/MyContent/NS_BallEffect.NS_BallEffect'"));
-	if (NiagaraAsset.Succeeded())
-	{
-		BallNiagaraComponent->SetAsset(NiagaraAsset.Object);
-	}
 
 }
 

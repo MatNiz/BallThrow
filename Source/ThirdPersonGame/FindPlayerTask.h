@@ -19,6 +19,6 @@ public:
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory);
 
 private:
-	UPROPERTY(EditInstanceOnly, BluepRIntReadWrite, Category = "AI", meta = (AllowPrivateAccess = " true"))
+	UPROPERTY(EditInstanceOnly, Category = "Properties")
 		float OffsetDistance = 150.0f;
 };

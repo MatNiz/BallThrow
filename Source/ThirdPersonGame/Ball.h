@@ -26,20 +26,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, Category = "Properties")
-		class UStaticMeshComponent* BallMesh;
 
 	void Throw(AActor* Actor, float ThrowSpeed, float ThrowZOffset);
 	void PickUp(AActor* Actor);
 	void ToggleNiagara();
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Properties")
+	class UStaticMeshComponent* BallMesh;
+	UPROPERTY(EditDefaultsOnly, Category = "Properties")
 	class UNiagaraComponent* BallNiagaraComponent;
 
 
 	bool IsPickedUp = false;
 	bool IsInTheAir = false;
-
 	bool IsNiagaraOn = false;
 
 
