@@ -29,8 +29,3 @@ void ABallCounterHUD::BeginPlay()
 	}
 
 }
-
-UUserWidget* ABallCounterHUD::GetUIWidget() const
-{
-	return UIWidget;
-}

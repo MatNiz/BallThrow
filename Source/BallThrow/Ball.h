@@ -33,17 +33,14 @@ public:
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Properties")
-	class UStaticMeshComponent* BallMesh;
+		class UStaticMeshComponent* BallMesh;
 	UPROPERTY(EditDefaultsOnly, Category = "Properties")
-	class UNiagaraComponent* BallNiagaraComponent;
+		class UNiagaraComponent* BallNiagaraComponent;
 
-
-	bool IsPickedUp = false;
-	bool IsInTheAir = false;
-	bool IsNiagaraOn = false;
+	bool IsPickedUp;
+	bool IsInTheAir;
 
 
 	UFUNCTION()
-	void OnBallHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
+		void OnBallHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };

@@ -25,8 +25,8 @@ public:
 protected:
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* BallCounterText;
-
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* InteractionText;
+
 
 };

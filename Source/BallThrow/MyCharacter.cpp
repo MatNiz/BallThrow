@@ -13,11 +13,18 @@
 #include "GameFramework/HUD.h"
 #include "BallCounterHUD.h"
 #include "BallCounterWidget.h"
+#include "BallThrowGameMode.h"
 
 AMyCharacter::AMyCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+
+	InteractionSphere = CreateDefaultSubobject<USphereComponent>("InteractionSphere");
+	InteractionSphere->SetSphereRadius(InteractionRadius);
+	InteractionSphere->SetupAttachment(RootComponent);
+
+	IsBallInHand = false;
 }
 
 void AMyCharacter::BeginPlay()
@@ -25,24 +32,8 @@ void AMyCharacter::BeginPlay()
 	Super::BeginPlay();
 
 
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if (PlayerController)
-	{
-		AHUD* PlayerHUD = PlayerController->GetHUD();
-		if (PlayerHUD)
-		{
-			ABallCounterHUD* MyHUD = Cast<ABallCounterHUD>(PlayerHUD);
-			if (MyHUD)
-			{
-				UUserWidget* UserWidget = MyHUD->GetUIWidget();
-				if (UserWidget)
-				{
-					BallCounterWidget = Cast<UBallCounterWidget>(UserWidget);
-				}
-			}
-		}
-	}
-
+	ABallThrowGameMode* GameMode = Cast<ABallThrowGameMode>(GetWorld()->GetAuthGameMode());
+	BallCounterWidget = GameMode->GetPlayerWidget();
 }
 
 void AMyCharacter::Tick(float DeltaTime)
@@ -50,44 +41,34 @@ void AMyCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
-	TArray<AActor*> FoundActors;
-	TArray<AActor*> AllChests;
-	TArray<AActor*> AllBalls;
-
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChest::StaticClass(), AllChests);
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABall::StaticClass(), AllBalls);
-
-	FoundActors.Append(AllChests);
-	FoundActors.Append(AllBalls);
-
-	FVector CharacterLocation = GetActorLocation();
-
-	float NearestDistance = MAX_FLT;
-	NearestActor = nullptr;
-
-	for (AActor* Actor : FoundActors)
-	{
-		float DistanceToPlayer = FVector::Distance(Actor->GetActorLocation(), CharacterLocation);
-
-		if (DistanceToPlayer < NearestDistance)
-		{
-			NearestDistance = DistanceToPlayer;
-			NearestActor = Actor;
-		}
-	}
-
-	if (NearestDistance >= InteractionDistance)
+	if (OverlapingActors.Num() == 0)
 	{
 		NearestActor = nullptr;
 	}
+	else
+	{
+		FVector CharacterLocation = GetActorLocation();
 
+		float NearestDistance = MAX_FLT;
+		NearestActor = nullptr;
+
+		for (AActor* Actor : OverlapingActors)
+		{
+			float DistanceToPlayer = FVector::Distance(Actor->GetActorLocation(), CharacterLocation);
+			if (DistanceToPlayer < NearestDistance)
+			{
+				NearestDistance = DistanceToPlayer;
+				NearestActor = Actor;
+			}
+		}
+	}
 	NearestActorHandling();
 }
 
 
 void AMyCharacter::NearestActorHandling()
 {
-	if (NearestActor && BallInHandBool == false)
+	if (NearestActor && IsBallInHand == false)
 	{
 		if (AChest* Chest = Cast<AChest>(NearestActor))
 		{
@@ -119,12 +100,12 @@ void AMyCharacter::Interact()
 		}
 
 		ABall* Ball = Cast<ABall>(NearestActor);
-		if (Ball && BallInHandBool == false)
+		if (Ball && IsBallInHand == false)
 		{
 			Ball->PickUp(this);
 			//BallInHandRef = Ball;
 			ActorInHandRef = Ball;
-			BallInHandBool = true;
+			IsBallInHand = true;
 
 			BallCounterWidget->ChangeBallCounterText(FText::FromString("Ball: 1"));
 			SpawnNewBallCollector();
@@ -135,14 +116,30 @@ void AMyCharacter::Interact()
 void AMyCharacter::ThrowBall()
 {
 	ABall* Ball = Cast<ABall>(ActorInHandRef);
-	if (Ball != nullptr && BallInHandBool == true)
+	if (Ball != nullptr && IsBallInHand == true)
 	{
 		Ball->Throw(this, ThrowSpeed, ThrowZOffset);
 		Ball->ToggleNiagara();
-		BallInHandBool = false;
+		IsBallInHand = false;
 
 		BallCounterWidget->ChangeBallCounterText(FText::FromString("Ball: 0"));
 	}
+}
+
+void AMyCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	AChest* Chest = Cast<AChest>(OtherActor);
+	ABall* Ball = Cast<ABall>(OtherActor);
+
+	if (Chest || Ball)
+	{
+		OverlapingActors.Add(OtherActor);
+	}
+}
+
+void AMyCharacter::NotifyActorEndOverlap(AActor* OtherActor)
+{
+	OverlapingActors.Remove(OtherActor);
 }
 
 void AMyCharacter::SpawnNewBallCollector()
@@ -156,7 +153,6 @@ void AMyCharacter::SpawnNewBallCollector()
 	}
 }
 
-
 AActor* AMyCharacter::GetActorInHandRef() const
 {
 	return ActorInHandRef;
@@ -169,10 +165,8 @@ void AMyCharacter::ClearBallInHandRef()
 
 bool AMyCharacter::GetBallInHandBool()
 {
-	return BallInHandBool;
+	return IsBallInHand;
 }
-
-
 
 
 
@@ -199,7 +193,6 @@ void AMyCharacter::MoveForward(float Value)
 		AddMovementInput(GetActorForwardVector(), Value);
 	}
 }
-
 
 void AMyCharacter::MoveRight(float Value)
 {

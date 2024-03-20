@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/SphereComponent.h"
+#include "Chest.h"
+#include "Ball.h"
 #include "MyCharacter.generated.h"
 
 
@@ -33,20 +36,30 @@ private:
 		TSubclassOf<class ABallCollectorCharacter> BallCollectorClass;
 	UPROPERTY(EditDefaultsOnly, Category = "References")
 		TSubclassOf<class ABallCollectorController> BallCollectorControllerClass;
+	UPROPERTY(EditAnywhere, Category = "Properites")
+		USphereComponent* InteractionSphere;
 
 	AActor* ActorInHandRef;
 	AActor* NearestActor;
+
+	TArray<AActor*> OverlapingActors;
 
 	class UBallCounterWidget* BallCounterWidget;
 
 	FVector BallCollectorSpawnLocation = FVector(0, 0, 180);
 
-	bool BallInHandBool = false;
+	bool IsBallInHand;
 
-	float InteractionDistance = 150.0f;
+	float InteractionRadius = 150.0f;
 
 	float ThrowSpeed = 800.0f;
 	float ThrowZOffset = 800.0f;
+
+
+	UFUNCTION() 
+		virtual void NotifyActorBeginOverlap(AActor* OtherActor) override; 
+	UFUNCTION() 
+		virtual void NotifyActorEndOverlap(AActor* OtherActor) override; 
 
 	void SpawnNewBallCollector();
 	void NearestActorHandling();
@@ -55,5 +68,4 @@ private:
 	void MoveRight(float Value);
 	void Interact();
 	void ThrowBall();
-
 };

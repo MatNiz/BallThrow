@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "BallCounterWidget.h"
 #include "BallThrowGameMode.generated.h"
 
 UCLASS(minimalapi)
@@ -13,4 +14,14 @@ class ABallThrowGameMode : public AGameModeBase
 
 public:
 	ABallThrowGameMode();
+
+
+	void SetPlayerWidget(class UBallCounterWidget* NewPlayerWidget);
+	class UBallCounterWidget* GetPlayerWidget();
+
+
+private:
+	class UBallCounterWidget* PlayerWidget;
+	
+
 };

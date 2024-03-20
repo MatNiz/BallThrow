@@ -33,14 +33,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Properties")
 		class UStaticMeshComponent* ChestMesh;
 	UPROPERTY(EditDefaultsOnly, Category = "Properties")
-	class UStaticMesh* ChestClosedMesh;
+		class UStaticMesh* ChestClosedMesh;
 	UPROPERTY(EditDefaultsOnly, Category = "Properties")
-	class UStaticMesh* ChestOpenMesh;
+		class UStaticMesh* ChestOpenMesh;
 
 	UMaterialInstanceDynamic* DynamicMaterialInstance;
 	UMaterialInterface* OriginalMaterial;
 
-	bool ChestStateBool = false;
+	bool ChestStateBool;
 
 	float MinSpawnOffset = 85.0f;
 	float MaxSpawnOffset = 115.0f;

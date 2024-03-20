@@ -8,6 +8,9 @@ AChest::AChest()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+
+	ChestStateBool = false;
+
 	ChestMesh = CreateDefaultSubobject<UStaticMeshComponent>("ChestMesh");
 	RootComponent = ChestMesh;
 

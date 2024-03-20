@@ -13,17 +13,20 @@ ABall::ABall()
 	PrimaryActorTick.bCanEverTick = true;
 
 
+	IsPickedUp = false;
+	IsInTheAir = false;
+
 	BallMesh = CreateDefaultSubobject<UStaticMeshComponent>("BallMesh");
 	RootComponent = BallMesh;
 	BallNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>("BallNiagaraComponent");
 	BallNiagaraComponent->SetupAttachment(RootComponent);
-
 }
 
 // Called when the game starts or when spawned
 void ABall::BeginPlay()
 {
 	Super::BeginPlay();
+
 
 	BallNiagaraComponent->Deactivate();
 	BallMesh->OnComponentHit.AddDynamic(this, &ABall::OnBallHit);
@@ -33,6 +36,7 @@ void ABall::BeginPlay()
 void ABall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 
 	if (IsInTheAir)
 	{
@@ -44,12 +48,7 @@ void ABall::Tick(float DeltaTime)
 
 void ABall::ToggleNiagara()
 {
-	if(IsNiagaraOn)
-		BallNiagaraComponent->Deactivate();
-	else
-		BallNiagaraComponent->Activate();
-
-	IsNiagaraOn = !IsNiagaraOn;
+	BallNiagaraComponent->ToggleActive();
 }
 
  

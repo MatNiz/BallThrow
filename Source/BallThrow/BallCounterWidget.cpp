@@ -3,10 +3,12 @@
 
 #include "BallCounterWidget.h"
 #include "Runtime/UMG/Public/Components/TextBlock.h"
+#include "BallThrowGameMode.h"
 
 void UBallCounterWidget::NativeConstruct()
 {
-
+	ABallThrowGameMode* GameMode = Cast<ABallThrowGameMode>(GetWorld()->GetAuthGameMode());
+	GameMode->SetPlayerWidget(this);
 }
 
 void UBallCounterWidget::ChangeBallCounterText(FText text)

@@ -18,7 +18,6 @@ public:
 	ABallCounterHUD();
 	void BeginPlay() override;
 
-	class UUserWidget* GetUIWidget() const;
 
 private:
 	TSubclassOf<class UUserWidget> UIBPClass;
