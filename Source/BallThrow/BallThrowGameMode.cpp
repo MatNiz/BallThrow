@@ -6,15 +6,39 @@
 ABallThrowGameMode::ABallThrowGameMode()
 {
 
+}
+
+void ABallThrowGameMode::BeginPlay()
+{
+
+    for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+    {
+        APlayerController* PlayerController = It->Get();
+        AddWidgetForPlayer(PlayerController);
+    }
 
 }
 
-void ABallThrowGameMode::SetPlayerWidget(class UBallCounterWidget* NewPlayerWidget)
+UBallCounterWidget* ABallThrowGameMode::GetWidgetForPlayer(AController* Controller)
 {
-	PlayerWidget = NewPlayerWidget;
+    UBallCounterWidget** WidgetInstancePtr = PlayerWidgets.Find(Controller);
+    if (WidgetInstancePtr)
+    {
+        return *WidgetInstancePtr;
+    }
+    return nullptr;
 }
 
-UBallCounterWidget* ABallThrowGameMode::GetPlayerWidget()
+void ABallThrowGameMode::AddWidgetForPlayer(AController* Controller)
 {
-	return PlayerWidget;
+    if (Controller)
+    {
+        UBallCounterWidget* WidgetInstance = CreateWidget<UBallCounterWidget>(GetWorld(), WidgetClass);
+        if (WidgetInstance)
+        {
+            WidgetInstance->AddToViewport();
+
+            PlayerWidgets.Add(Controller, WidgetInstance);
+        }
+    }
 }

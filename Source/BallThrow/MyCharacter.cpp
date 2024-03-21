@@ -11,7 +11,6 @@
 #include "BallCollectorCharacter.h"
 #include "BallCollectorController.h"
 #include "GameFramework/HUD.h"
-#include "BallCounterHUD.h"
 #include "BallCounterWidget.h"
 #include "BallThrowGameMode.h"
 
@@ -33,7 +32,7 @@ void AMyCharacter::BeginPlay()
 
 
 	ABallThrowGameMode* GameMode = Cast<ABallThrowGameMode>(GetWorld()->GetAuthGameMode());
-	BallCounterWidget = GameMode->GetPlayerWidget();
+	BallCounterWidget = GameMode->GetWidgetForPlayer(this->GetController());
 }
 
 void AMyCharacter::Tick(float DeltaTime)
@@ -41,7 +40,7 @@ void AMyCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
-	if (OverlapingActors.Num() == 0)
+	if (OverlapingActors.Num() == 0 || IsBallInHand == true)
 	{
 		NearestActor = nullptr;
 	}
@@ -72,7 +71,7 @@ void AMyCharacter::NearestActorHandling()
 	{
 		if (AChest* Chest = Cast<AChest>(NearestActor))
 		{
-			if (Chest->GetChestStateBool())
+			if (Chest->GetIsChestOpen())
 				BallCounterWidget->ChangeInteractionText(FText::FromString("E: Close Chest"));
 			else
 				BallCounterWidget->ChangeInteractionText(FText::FromString("E: Open Chest"));

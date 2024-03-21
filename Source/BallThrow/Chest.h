@@ -25,13 +25,15 @@ public:
 
 
 	void ChestInteracton();
-	bool GetChestStateBool();
+	bool GetIsChestOpen();
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "References")
 		TSubclassOf<class ABall> BallClass;
 	UPROPERTY(EditDefaultsOnly, Category = "Properties")
 		class UStaticMeshComponent* ChestMesh;
+	UPROPERTY(EditDefaultsOnly, Category = "Properties")
+		USceneComponent* SpawnLocationComponent; 
 	UPROPERTY(EditDefaultsOnly, Category = "Properties")
 		class UStaticMesh* ChestClosedMesh;
 	UPROPERTY(EditDefaultsOnly, Category = "Properties")
@@ -40,12 +42,11 @@ private:
 	UMaterialInstanceDynamic* DynamicMaterialInstance;
 	UMaterialInterface* OriginalMaterial;
 
-	bool ChestStateBool;
+	FVector SpawnOffset = FVector(50, 0, 50);
 
-	float MinSpawnOffset = 85.0f;
-	float MaxSpawnOffset = 115.0f;
-	float ZSpawnOffset = 50.0f;
+	bool IsChestOpen;
+
 
 	void SpawnBall();
-	float RandomFloat(float Min, float Max);
+
 };

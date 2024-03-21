@@ -15,13 +15,16 @@ class ABallThrowGameMode : public AGameModeBase
 public:
 	ABallThrowGameMode();
 
+	void BeginPlay();
 
-	void SetPlayerWidget(class UBallCounterWidget* NewPlayerWidget);
-	class UBallCounterWidget* GetPlayerWidget();
 
+	UBallCounterWidget* GetWidgetForPlayer(AController* Controller);
+	void AddWidgetForPlayer(AController* Controller);
 
 private:
-	class UBallCounterWidget* PlayerWidget;
-	
+	UPROPERTY(EditDefaultsOnly, Category = "References")
+		TSubclassOf<class UBallCounterWidget> WidgetClass;
+
+	TMap<AController*, class UBallCounterWidget*> PlayerWidgets;
 
 };

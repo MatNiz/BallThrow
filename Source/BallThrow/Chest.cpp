@@ -1,6 +1,6 @@
 #include "Chest.h"
 #include "Ball.h"
-#include <random>
+
 
 // Sets default values
 AChest::AChest()
@@ -9,11 +9,14 @@ AChest::AChest()
 	PrimaryActorTick.bCanEverTick = true;
 
 
-	ChestStateBool = false;
+	IsChestOpen = false;
 
 	ChestMesh = CreateDefaultSubobject<UStaticMeshComponent>("ChestMesh");
 	RootComponent = ChestMesh;
 
+	SpawnLocationComponent = CreateDefaultSubobject<USceneComponent>("SpawnLocationComponent");
+	SpawnLocationComponent->AttachTo(RootComponent);
+	SpawnLocationComponent->SetRelativeLocation(SpawnOffset);
 }
 
 // Called when the game starts or when spawned
@@ -38,7 +41,7 @@ void AChest::Tick(float DeltaTime)
 
 void AChest::ChestInteracton()
 {
-	if (ChestStateBool == false)
+	if (IsChestOpen == false)
 	{
 		SpawnBall();
 		ChestMesh->SetStaticMesh(ChestOpenMesh);
@@ -47,28 +50,17 @@ void AChest::ChestInteracton()
 	{
 		ChestMesh->SetStaticMesh(ChestClosedMesh);
 	}
-	ChestStateBool = !ChestStateBool;
+	IsChestOpen = !IsChestOpen;
 }
 
-bool AChest::GetChestStateBool()
+bool AChest::GetIsChestOpen()
 {
-	return ChestStateBool;
+	return IsChestOpen;
 }
 
 
 void AChest::SpawnBall()
 {
-	FTransform SpawnTransform = GetActorTransform();
-
-	SpawnTransform.SetLocation(GetActorLocation() + GetActorForwardVector() * RandomFloat(MinSpawnOffset, MaxSpawnOffset) + FVector(0, 0, ZSpawnOffset));
-	GetWorld()->SpawnActor<ABall>(BallClass, SpawnTransform);
+	GetWorld()->SpawnActor<ABall>(BallClass, SpawnLocationComponent->GetComponentTransform());
 }
 
-float AChest::RandomFloat(float Min, float Max)
-{
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dis(Min, Max);
-
-	return dis(gen);
-}
